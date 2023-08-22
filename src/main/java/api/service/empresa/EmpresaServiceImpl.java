@@ -39,20 +39,19 @@ public class EmpresaServiceImpl implements EmpresaService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public EmpresaDto cadastrar(@Valid EmpresaDto novaEmpresa) {
+    public void cadastrar(@Valid EmpresaDto novaEmpresa) {
         usuarioService.emailExiste(novaEmpresa.getEmail());
         Empresa empresa = EmpresaMapper.of(novaEmpresa);
         empresa.setSenha(passwordEncoder.encode(empresa.getSenha()));
         Usuario empresaBanco = empresaRepository.save(empresa);
         EmpresaDto empresaDto = EmpresaMapper.ConvertToDto(empresaBanco);
         empresaDto.getEndereco().setUsuario(empresaBanco);
-        enderecoRepository.save(EnderecoMapper.to(empresaDto.getEndereco()));
-        return empresaDto;
+        enderecoRepository.save(EnderecoMapper.to(empresaDto.getEndereco()));;
     }
 
-    public List<EmpresaDto> listar() {
-        List<Empresa> lista = empresaRepository.findAll();
-        return lista.stream().map(EmpresaMapper::ConvertToDto).collect(Collectors.toList());
+    public List<Empresa> listar() {
+        return empresaRepository.findAll();
+        //lista.stream().map(EmpresaMapper::ConvertToDto).collect(Collectors.toList());
     }
 
     public List<EmpresaDto> buscarPorCnpj(String cnpj) {

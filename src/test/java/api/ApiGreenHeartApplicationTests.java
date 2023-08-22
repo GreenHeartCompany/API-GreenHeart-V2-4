@@ -1,4 +1,4 @@
-package heart.green.api;
+package api;
 
 import org.springframework.boot.test.context.SpringBootTest;
 

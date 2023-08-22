@@ -1,7 +1,9 @@
 package api.controllers;
 
+import api.domain.voluntario.Voluntario;
 import api.dto.voluntario.VoluntarioAtualizadoParcial;
 import api.dto.voluntario.VoluntarioDto;
+import api.dto.voluntario.VoluntarioListaDto;
 import api.service.voluntario.VoluntarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -39,8 +41,9 @@ public class VoluntarioController {
                             description = "Voluntário criado.")})
     @PostMapping("/cadastrar")
     @CrossOrigin("http://localhost:3000/cadastro-voluntario")
-    public ResponseEntity<?> cadastrar(@RequestBody @Valid VoluntarioDto voluntarioDto) {
-        return ResponseEntity.created(null).body(voluntarioService.cadastrar(voluntarioDto));
+    public ResponseEntity<Void> cadastrar(@RequestBody @Valid VoluntarioDto voluntarioDto) {
+        voluntarioService.cadastrar(voluntarioDto);
+        return ResponseEntity.created(null).build();
     }
 
     @Operation(summary = "Lista todos os voluntário existentes.")
@@ -51,7 +54,7 @@ public class VoluntarioController {
             @ApiResponse(responseCode = "200",
                     description = "Lista de voluntários.")})
     @GetMapping
-    public ResponseEntity<List<api.dto.voluntario.VoluntarioDto>> listar() {
+    public ResponseEntity<List<VoluntarioListaDto>> listar() {
         return ResponseEntity.ok(voluntarioService.listar());
     }
 

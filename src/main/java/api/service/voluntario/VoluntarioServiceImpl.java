@@ -5,6 +5,7 @@ import api.domain.endereco.Endereco;
 import api.domain.usuario.Usuario;
 import api.domain.voluntario.Voluntario;
 import api.dto.voluntario.VoluntarioDto;
+import api.dto.voluntario.VoluntarioListaDto;
 import api.repository.EnderecoRepository;
 import api.repository.VoluntarioRepository;
 import api.dto.endereco.EnderecoMapper;
@@ -36,36 +37,34 @@ public class VoluntarioServiceImpl implements VoluntarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public VoluntarioDto cadastrar(@Valid VoluntarioDto voluntarioRequest) {
+    public void cadastrar(@Valid VoluntarioDto voluntarioRequest) {
         usuarioService.emailExiste(voluntarioRequest.getEmail());
         Voluntario voluntario = VoluntarioMapper.of(voluntarioRequest);
         voluntario.setSenha(passwordEncoder.encode(voluntario.getSenha()));
         Usuario voluntarioBanco = voluntarioRepository.save(voluntario);
-        api.dto.voluntario.VoluntarioDto voluntarioDto = VoluntarioMapper.ConvertToDto(voluntarioBanco);
         voluntarioRequest.getEndereco().setUsuario(voluntarioBanco);
         enderecoRepository.save(EnderecoMapper.to(voluntarioRequest.getEndereco()));
-        return voluntarioDto;
     }
 
-    public List<api.dto.voluntario.VoluntarioDto> listar() {
+    public List<VoluntarioListaDto> listar() {
         List<Voluntario> listaVoluntarios = voluntarioRepository.findAll();
         if (listaVoluntarios.isEmpty()) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-        return listaVoluntarios.stream().map(VoluntarioMapper::ConvertToDto).collect(Collectors.toList());
+        return listaVoluntarios.stream().map(VoluntarioMapper::ConvertListToDto).collect(Collectors.toList());
     }
 
-    public List<api.dto.voluntario.VoluntarioDto> listarTst() {
+    public List<VoluntarioDto> listarTst() {
         List<Voluntario> listaVoluntario = voluntarioRepository.findAll();
         return listaVoluntario.stream().map(VoluntarioMapper::ConvertToDto).collect(Collectors.toList());
     }
 
-    public List<api.dto.voluntario.VoluntarioDto> buscarPorCpf(String cpf) {
+    public List<VoluntarioDto> buscarPorCpf(String cpf) {
         List<Voluntario> voluntario = voluntarioRepository.findAllByCpf(cpf);
         if (voluntario.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                 String.format("Voluntário com o CPF: %s não encontrado.", cpf));
         return VoluntarioMapper.of(voluntario);
     }
 
-    public Optional<api.dto.voluntario.VoluntarioDto> atualizar(Long id, VoluntarioDto voluntarioAtualizado) {
+    public Optional<VoluntarioDto> atualizar(Long id, VoluntarioDto voluntarioAtualizado) {
         if (voluntarioRepository.existsById(id)) {
             voluntarioAtualizado.setId(id);
             voluntarioAtualizado.setSenha(passwordEncoder.encode(voluntarioAtualizado.getSenha()));
@@ -83,7 +82,7 @@ public class VoluntarioServiceImpl implements VoluntarioService {
                 String.format("Voluntário com o ID: %d não encontrado.", id));
     }
 
-    public Optional<api.dto.voluntario.VoluntarioDto> atualizacaoParcial(Long id, VoluntarioAtualizadoParcial voluntarioAtualizado) {
+    public Optional<VoluntarioDto> atualizacaoParcial(Long id, VoluntarioAtualizadoParcial voluntarioAtualizado) {
         if (voluntarioRepository.existsById(id)) {
             Optional<Voluntario> voluntarioBanco = voluntarioRepository.findById(id);
             Endereco endereco = enderecoRepository.findByUsuarioEquals(id);

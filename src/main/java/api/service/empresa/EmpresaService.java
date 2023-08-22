@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EmpresaService{
-    EmpresaDto cadastrar( EmpresaDto empresaRequest) throws Exception;
-    List<EmpresaDto> listar();
+    void cadastrar( EmpresaDto empresaRequest) throws Exception;
+    List<Empresa> listar();
     List<EmpresaDto> buscarPorCnpj(String cnpj);
     Optional<EmpresaDto> atualizar(Long id, EmpresaDto empresaAtualizada);
     void deletar(Long id);

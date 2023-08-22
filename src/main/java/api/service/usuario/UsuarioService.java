@@ -40,7 +40,7 @@ public class UsuarioService {
         this.usuarioRepository.save(novoUsuario);
     }
 
-    public UsuarioTokenDto autenticar(UsuarioLoginDto usuarioLoginDto){
+    public UsuarioTokenDto autenticar(UsuarioLoginDto usuarioLoginDto) {
         final UsernamePasswordAuthenticationToken credential =
                 new UsernamePasswordAuthenticationToken(usuarioLoginDto.getEmail(), usuarioLoginDto.getSenha());
 
@@ -51,15 +51,17 @@ public class UsuarioService {
                         () -> new ResponseStatusException(404, "Email do usuário não cadastrado", null)
                 );
 
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         final String token = gerenciadorTokenJwt.generateToken(authentication);
 
-        return UsuarioMapper.of(usuarioAutenticado,token);
+        return UsuarioMapper.of(usuarioAutenticado, token);
     }
-    
+
     public Boolean emailExiste(String email) {
-        if (usuarioRepository.existsByEmailEquals(email)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email já existente.");
+        if (usuarioRepository.existsByEmailEquals(email))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email já existente.");
         return false;
     }
 
@@ -74,7 +76,6 @@ public class UsuarioService {
                 .invalidateHttpSession(true) // Invalida a sessão do usuário
                 .deleteCookies("JSESSIONID")
                 .permitAll();
-                // Remove os cookies relacionados à sessão
-
+        // Remove os cookies relacionados à sessão
     }
 }

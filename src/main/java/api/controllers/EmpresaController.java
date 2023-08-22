@@ -26,18 +26,18 @@ import java.util.Optional;
 public class EmpresaController {
     @Autowired
     private EmpresaService empresaService;
-
     @Operation(summary = "Cadastra uma nova empresa.")
     @ApiResponses({@ApiResponse(responseCode = "400", description = "Empresa Inválido.", content = @Content(schema = @Schema(hidden = true))), @ApiResponse(responseCode = "201", description = "Empresa criado."),})
     @PostMapping("/cadastrar")
     public ResponseEntity<EmpresaDto> cadastrar(@RequestBody @Valid EmpresaDto novaEmpresa) throws Exception {
-        return ResponseEntity.created(null).body(empresaService.cadastrar(novaEmpresa));
+        empresaService.cadastrar(novaEmpresa);
+        return ResponseEntity.created(null).build();
     }
 
     @Operation(summary = "Lista todos as empresas existentes.")
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Não há empresas na lista.", content = @Content(schema = @Schema(hidden = true))), @ApiResponse(responseCode = "200", description = "Lista de empresas."),})
     @GetMapping
-    public ResponseEntity<List<EmpresaDto>> listar() {
+    public ResponseEntity<List<Empresa>> listar() {
         return ResponseEntity.ok(empresaService.listar());
     }
 

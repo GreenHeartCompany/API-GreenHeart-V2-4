@@ -6,6 +6,7 @@ import api.domain.publicacao.Publicacao;
 import api.repository.PublicacaoRepository;
 import api.dto.publicacao.PublicacaoMapper;
 
+import api.util.enums.TipoPublicacaoEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -77,5 +78,16 @@ public class PublicacaoServiceImpl implements PublicacaoService {
 
     public void addPublicacaoListener(PublicacaoListener publicacaoListener) {
         ouvintes.add(publicacaoListener);
+    }
+
+    @Override
+    public List<Publicacao> filtrar(String tipoPublicacao) {
+        List<Publicacao> asd = publicacaoRepository.findAllByTipoAcaoEquals(tipoPublicacao);
+        if (asd.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("Nenhuma publicação encontrada.", tipoPublicacao));
+        } else {
+            return asd;
+        }
     }
 }

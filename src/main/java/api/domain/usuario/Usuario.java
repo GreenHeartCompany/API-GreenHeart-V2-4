@@ -26,6 +26,6 @@ public class Usuario {
     private String senha;
     @Column(name = "telefone")
     private String telefone;
-    @Column(name = "isPlanoAtivo")
-    private Boolean isPlanoAtivo;
+//    @Column(name = "isPlanoAtivo")
+//    private Boolean isPlanoAtivo;
 }

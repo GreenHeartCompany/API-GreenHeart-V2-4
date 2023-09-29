@@ -9,6 +9,7 @@ import api.service.empresa.EmpresaService;
 import api.service.publicacao.PublicacaoListener;
 import api.service.publicacao.PublicacaoService;
 import api.service.publicacao.PublicacaoServiceImpl;
+import api.util.enums.TipoPublicacaoEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -102,5 +103,11 @@ public class PublicacaoController {
     public ResponseEntity<Optional<Publicacao>> buscarPorId(
             @PathVariable Long id) {
         return ResponseEntity.ok(publicacaoService.buscarPorId(id));
+    }
+
+    @GetMapping("/filtrar/{tipoPublicacao}")
+    public ResponseEntity<List<Publicacao>> filtrarPorTipo(
+            @PathVariable String tipoPublicacao) {
+        return ResponseEntity.ok(publicacaoService.filtrar(tipoPublicacao));
     }
 }

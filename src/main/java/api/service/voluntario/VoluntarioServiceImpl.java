@@ -10,7 +10,7 @@ import api.repository.EnderecoRepository;
 import api.repository.VoluntarioRepository;
 import api.dto.endereco.EnderecoMapper;
 import api.dto.voluntario.VoluntarioMapper;
-import api.service.usuario.UsuarioService;
+import api.service.usuario.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,19 +26,19 @@ import java.util.stream.Collectors;
 public class VoluntarioServiceImpl implements VoluntarioService {
     private final VoluntarioRepository voluntarioRepository;
     private final EnderecoRepository enderecoRepository;
-    private final UsuarioService usuarioService;
+    private final UsuarioServiceImpl usuarioServiceImpl;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public VoluntarioServiceImpl(VoluntarioRepository voluntarioRepository, EnderecoRepository enderecoRepository, UsuarioService usuarioService, PasswordEncoder passwordEncoder) {
+    public VoluntarioServiceImpl(VoluntarioRepository voluntarioRepository, EnderecoRepository enderecoRepository, UsuarioServiceImpl usuarioServiceImpl, PasswordEncoder passwordEncoder) {
         this.voluntarioRepository = voluntarioRepository;
         this.enderecoRepository = enderecoRepository;
-        this.usuarioService = usuarioService;
+        this.usuarioServiceImpl = usuarioServiceImpl;
         this.passwordEncoder = passwordEncoder;
     }
 
     public void cadastrar(@Valid VoluntarioDto voluntarioRequest) {
-        usuarioService.emailExiste(voluntarioRequest.getEmail());
+        usuarioServiceImpl.emailExiste(voluntarioRequest.getEmail());
         Voluntario voluntario = VoluntarioMapper.of(voluntarioRequest);
         voluntario.setSenha(passwordEncoder.encode(voluntario.getSenha()));
         Usuario voluntarioBanco = voluntarioRepository.save(voluntario);

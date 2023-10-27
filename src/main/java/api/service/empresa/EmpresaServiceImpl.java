@@ -9,7 +9,7 @@ import api.repository.EnderecoRepository;
 import api.dto.empresa.EmpresaDto;
 import api.dto.empresa.EmpresaMapper;
 import api.dto.endereco.EnderecoMapper;
-import api.service.usuario.UsuarioService;
+import api.service.usuario.UsuarioServiceImpl;
 import api.service.publicacao.PublicacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,27 +20,26 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class EmpresaServiceImpl implements EmpresaService {
     private final EmpresaRepository empresaRepository;
     private final EnderecoRepository enderecoRepository;
-    private final UsuarioService usuarioService;
+    private final UsuarioServiceImpl usuarioServiceImpl;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public EmpresaServiceImpl(EmpresaRepository empresaRepository, EnderecoRepository enderecoRepository,
-                              UsuarioService usuarioService,
+                              UsuarioServiceImpl usuarioServiceImpl,
                               PublicacaoService publicacaoService, PasswordEncoder passwordEncoder) {
         this.empresaRepository = empresaRepository;
         this.enderecoRepository = enderecoRepository;
-        this.usuarioService = usuarioService;
+        this.usuarioServiceImpl = usuarioServiceImpl;
         this.passwordEncoder = passwordEncoder;
     }
 
     public void cadastrar(@Valid EmpresaDto novaEmpresa) {
-        usuarioService.emailExiste(novaEmpresa.getEmail());
+        usuarioServiceImpl.emailExiste(novaEmpresa.getEmail());
         Empresa empresa = EmpresaMapper.of(novaEmpresa);
         empresa.setSenha(passwordEncoder.encode(empresa.getSenha()));
         Usuario empresaBanco = empresaRepository.save(empresa);

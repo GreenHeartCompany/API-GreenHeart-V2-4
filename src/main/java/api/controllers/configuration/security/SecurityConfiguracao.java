@@ -52,6 +52,7 @@ public class SecurityConfiguracao {
                 .antMatchers(
                         "/usuarios/login",
                         "/voluntarios/cadastrar",
+                        "/usuarios/verificar-email/**",
                         "/publicacoes/atualizar-feed",
                         "/pagamentos/processar",
                         "/publicacoes/atualizar-feed",

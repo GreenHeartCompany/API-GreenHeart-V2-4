@@ -5,10 +5,10 @@ import api.domain.plano.Plano;
 public class PlanoMapper {
     public static Plano to(PlanoDto planoDto){
         Plano plano = new Plano();
-        plano.setTituloPlano(plano.getTituloPlano());
-        plano.setDescricao(plano.getDescricao());
+        plano.setTituloPlano(planoDto.getTituloPlano());
+        plano.setDescricao(planoDto.getDescricao());
         plano.setTempoDuracao(planoDto.getTempoDuracao());
-        plano.setValor(plano.getValor());
+        plano.setValor(planoDto.getValor());
         return plano;
     }
 }

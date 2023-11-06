@@ -34,7 +34,7 @@ public class PlanoController {
     })
     @PostMapping
     public ResponseEntity<Plano> criar(@RequestBody @Valid PlanoDto planoDto) {
-        return ResponseEntity.created(null).body(planoService.criar(planoDto));
+        return ResponseEntity.status(201).body(planoService.criar(planoDto));
     }
 
     @Operation(summary = "Listar planos.")

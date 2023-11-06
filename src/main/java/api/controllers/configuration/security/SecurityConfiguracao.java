@@ -51,6 +51,7 @@ public class SecurityConfiguracao {
                 .authorizeRequests()
                 .antMatchers(
                         "/usuarios/login",
+                        "/planos",
                         "/voluntarios/cadastrar",
                         "/publicacoes/atualizar-feed",
                         "/pagamentos/processar",

@@ -22,5 +22,5 @@ public class Empresa extends Usuario {
     @ManyToOne
     @JoinColumn(name = "fk_plano")
     @JsonIgnore
-    private Plano fkPlano;
+    private Plano Plano;
 }

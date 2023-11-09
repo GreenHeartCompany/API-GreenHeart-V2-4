@@ -1,5 +1,6 @@
 package api.service.empresa;
 
+import api.domain.plano.Plano;
 import api.dto.empresa.EmpresaAtualizadaParcial;
 import api.domain.empresa.Empresa;
 import api.domain.endereco.Endereco;
@@ -9,6 +10,7 @@ import api.repository.EnderecoRepository;
 import api.dto.empresa.EmpresaDto;
 import api.dto.empresa.EmpresaMapper;
 import api.dto.endereco.EnderecoMapper;
+import api.service.plano.PlanoService;
 import api.service.usuario.UsuarioService;
 import api.service.publicacao.PublicacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,6 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class EmpresaServiceImpl implements EmpresaService {
@@ -28,25 +29,28 @@ public class EmpresaServiceImpl implements EmpresaService {
     private final EnderecoRepository enderecoRepository;
     private final UsuarioService usuarioService;
     private final PasswordEncoder passwordEncoder;
+    private final PlanoService planoService;
 
     @Autowired
     public EmpresaServiceImpl(EmpresaRepository empresaRepository, EnderecoRepository enderecoRepository,
                               UsuarioService usuarioService,
-                              PublicacaoService publicacaoService, PasswordEncoder passwordEncoder) {
+                              PublicacaoService publicacaoService, PasswordEncoder passwordEncoder, PlanoService planoService) {
         this.empresaRepository = empresaRepository;
         this.enderecoRepository = enderecoRepository;
         this.usuarioService = usuarioService;
         this.passwordEncoder = passwordEncoder;
+        this.planoService = planoService;
     }
 
     public void cadastrar(@Valid EmpresaDto novaEmpresa) {
         usuarioService.emailExiste(novaEmpresa.getEmail());
+        Plano plano = planoService.buscarPlanoPorId(novaEmpresa.getFkPlano()).orElseThrow(() -> new RuntimeException(String.format("Plano não encontrado com o ID %d", novaEmpresa.getFkPlano())));
         Empresa empresa = EmpresaMapper.of(novaEmpresa);
+        empresa.setPlano(plano);
         empresa.setSenha(passwordEncoder.encode(empresa.getSenha()));
-        Usuario empresaBanco = empresaRepository.save(empresa);
-        EmpresaDto empresaDto = EmpresaMapper.ConvertToDto(empresaBanco);
-        empresaDto.getEndereco().setUsuario(empresaBanco);
-        enderecoRepository.save(EnderecoMapper.to(empresaDto.getEndereco()));;
+        Empresa empresaBanco = empresaRepository.save(empresa);
+        novaEmpresa.getEndereco().setFkUsuario(empresaBanco.getIdUsuario());
+        enderecoRepository.save(EnderecoMapper.to(novaEmpresa.getEndereco(), empresaBanco));
     }
 
     public List<Empresa> listar() {
@@ -85,6 +89,7 @@ public class EmpresaServiceImpl implements EmpresaService {
         if (empresaRepository.existsById(id)) {
             Optional<Empresa> empresaBanco = empresaRepository.findById(id);
             Endereco endereco = enderecoRepository.findByUsuarioEquals(id);
+            Plano plano = planoService.buscarPlanoPorId(empresaAtualizada.getFkPlano()).orElseThrow(() -> new RuntimeException(String.format("Plano não encontrado com o ID %d", empresaAtualizada.getFkPlano())));
 
             if (empresaBanco.isPresent()) {
                 Empresa obj = empresaBanco.get();
@@ -110,7 +115,7 @@ public class EmpresaServiceImpl implements EmpresaService {
                 }
 
                 if (empresaAtualizada.getFkPlano() != null) {
-                    obj.setFkPlano(empresaAtualizada.getFkPlano());
+                    obj.setPlano(plano);
                 }
 
                 if (!empresaAtualizada.getEndereco().getLogradouro().isEmpty()) {
@@ -140,11 +145,9 @@ public class EmpresaServiceImpl implements EmpresaService {
     }
 
     @Override
-    public Optional<Empresa> buscarPorId(Long id) {
-        if (empresaRepository.existsById(id)) {
-            return empresaRepository.findById(id);
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                String.format("Empresa com o ID: %d não encontrado.", id));
+    public Empresa buscarPorId(Long id) {
+        return empresaRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Empresa com o ID: %d não encontrado.", id)));
     }
 }

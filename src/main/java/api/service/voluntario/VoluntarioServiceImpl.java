@@ -42,8 +42,8 @@ public class VoluntarioServiceImpl implements VoluntarioService {
         Voluntario voluntario = VoluntarioMapper.of(voluntarioRequest);
         voluntario.setSenha(passwordEncoder.encode(voluntario.getSenha()));
         Usuario voluntarioBanco = voluntarioRepository.save(voluntario);
-        voluntarioRequest.getEndereco().setUsuario(voluntarioBanco);
-        enderecoRepository.save(EnderecoMapper.to(voluntarioRequest.getEndereco()));
+        voluntarioRequest.getEndereco().setFkUsuario(voluntarioBanco.getIdUsuario());
+        enderecoRepository.save(EnderecoMapper.to(voluntarioRequest.getEndereco(), voluntarioBanco));
     }
 
     public List<VoluntarioListaDto> listar() {

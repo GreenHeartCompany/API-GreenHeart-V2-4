@@ -28,5 +28,5 @@ public class Publicacao {
     private String telOrganizador;
     @ManyToOne
     @JoinColumn(name = "fk_empresa")
-    private Empresa fkEmpresa;
+    private Empresa Empresa;
 }

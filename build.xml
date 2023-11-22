@@ -3,7 +3,7 @@
 	
 	<path id="tests.classpath" path=".">
 		<fileset dir="lib/">
-			<include name="api-green-heart-0.0.1-SNAPSHOT.jar.jar" />
+			<include name="api-green-heart-0.0.1-SNAPSHOT.jar" />
 		</fileset>
 		<pathelement path="target/" />
 	</path>

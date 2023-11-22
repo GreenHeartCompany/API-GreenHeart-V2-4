@@ -3,9 +3,9 @@
 	
 	<path id="tests.classpath" path=".">
 		<fileset dir="lib/">
-			<include name="*.jar" />
+			<include name="api-green-heart-0.0.1-SNAPSHOT.jar.jar" />
 		</fileset>
-		<pathelement path="target/classes/" />
+		<pathelement path="target/" />
 	</path>
 	
 	<target name="compile">

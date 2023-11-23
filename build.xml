@@ -1,15 +1,14 @@
-	
-<project name="Projecto de Exemplo para BUILD via Jenkins">
+<project name="Projeto para BUILD via Jenkins Free Style">
 	
 	<path id="tests.classpath" path=".">
 		<fileset dir="lib/">
-			<include name="api-green-heart-0.0.1-SNAPSHOT.jar" />
+			<include name="*.jar" />
 		</fileset>
-		<pathelement path="target/" />
+		<pathelement path="target/classes/" />
 	</path>
 	
 	<target name="compile">
-		<mkdir dir="target/"/>
+		<mkdir dir="target/classes/"/>
 		<mkdir dir="target/classes-test/"/>
 		<javac destdir="target/classes/" srcdir="src/main/java/" debug="true" encoding="UTF-8" />
 		<javac destdir="target/classes-test/" srcdir="src/test/java/" classpathref="tests.classpath" debug="true" encoding="UTF-8" />
@@ -28,6 +27,6 @@
 		</junit>
 	</target>
 	<target name="jar" depends="test">
-		<jar destfile="target/api-green-heart-0.0.1-SNAPSHOT.jar" basedir="target/classes/" />
+		<jar destfile="target/jenkins-exemplo.jar" basedir="target/classes/" />
 	</target>
 </project>

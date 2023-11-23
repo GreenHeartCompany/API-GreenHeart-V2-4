@@ -110,4 +110,8 @@ public class PublicacaoController {
             @PathVariable String tipoPublicacao) {
         return ResponseEntity.ok(publicacaoService.filtrar(tipoPublicacao));
     }
+
+    public ResponseEntity<List<Publicacao>> listar() {
+        return ResponseEntity.ok(publicacaoService.listar());
+    }
 }

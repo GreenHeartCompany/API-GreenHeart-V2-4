@@ -2,10 +2,12 @@ package api.dto.empresa;
 
 import api.domain.empresa.Empresa;
 import api.domain.mask.Mascara;
+import api.domain.plano.Plano;
 import api.domain.usuario.Usuario;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static api.domain.mask.Mascara.*;
@@ -19,7 +21,6 @@ public class EmpresaMapper {
         empresa.setSenha(empresaRequest.getSenha());
         empresa.setTelefone(clearTel(empresaRequest.getTelefone()));
         empresa.setCnpj(clearCnpj(empresaRequest.getCnpj()));
-        empresa.setFkPlano(empresaRequest.getFkPlano());
         return empresa;
     }
 

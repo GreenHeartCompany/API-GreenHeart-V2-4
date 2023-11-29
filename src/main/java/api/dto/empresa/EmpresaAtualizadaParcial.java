@@ -22,6 +22,6 @@ public class EmpresaAtualizadaParcial {
     private String telefone;
     @CNPJ
     private String cnpj;
-    private Plano fkPlano;
+    private Long fkPlano;
     private EnderecoDto endereco;
 }

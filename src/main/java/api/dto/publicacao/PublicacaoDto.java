@@ -41,5 +41,5 @@ public class PublicacaoDto {
     private String telOrganizador;
     @NotNull
     @Schema(name = "fk_empresa", description = "", example = "")
-    private Empresa fkEmpresa;
+    private Long fkEmpresa;
 }

@@ -74,6 +74,6 @@ public class EmpresaController {
     @ApiResponses({@ApiResponse(responseCode = "404", description = "Empresa não encontrada.", content = @Content(schema = @Schema(hidden = true))), @ApiResponse(responseCode = "200", description = ""),})
     @GetMapping("/buscar-por-id/{id}")
     public ResponseEntity<Optional<Empresa>> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(empresaService.buscarPorId(id));
+        return ResponseEntity.ok(Optional.ofNullable(empresaService.buscarPorId(id)));
     }
 }

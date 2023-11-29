@@ -14,5 +14,5 @@ public interface EmpresaService{
     Optional<EmpresaDto> atualizar(Long id, EmpresaDto empresaAtualizada);
     void deletar(Long id);
     Optional<EmpresaDto> atualizacaoParcial(Long id, EmpresaAtualizadaParcial empresaAtualizada);
-    Optional<Empresa> buscarPorId(Long id);
+    Empresa buscarPorId(Long id);
 }

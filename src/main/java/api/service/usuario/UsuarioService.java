@@ -51,7 +51,6 @@ public class UsuarioService {
                         () -> new ResponseStatusException(404, "Email do usuário não cadastrado", null)
                 );
 
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         final String token = gerenciadorTokenJwt.generateToken(authentication);

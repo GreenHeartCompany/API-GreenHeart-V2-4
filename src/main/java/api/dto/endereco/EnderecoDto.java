@@ -30,5 +30,5 @@ public class EnderecoDto {
     @Schema(name = "complemento", description = "Refêrencias para encontrar local", example = "Cobertura 9")
     private String complemento;
     @NotNull
-    private Usuario usuario;
+    private Long fkUsuario;
 }

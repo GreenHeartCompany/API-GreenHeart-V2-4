@@ -1,13 +1,13 @@
 package api.service.publicacao;
 
 import api.dto.publicacao.PublicacaoDto;
-import api.domain.arquivo.ArquivoTxt;
 import api.domain.publicacao.Publicacao;
 import api.repository.PublicacaoRepository;
 import api.dto.publicacao.PublicacaoMapper;
 
-import api.util.enums.TipoPublicacaoEnum;
+import api.service.empresa.EmpresaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,12 +22,23 @@ import java.util.Optional;
 public class PublicacaoServiceImpl implements PublicacaoService {
     private List<PublicacaoListener> ouvintes = new ArrayList<>();
     private String mensage = "";
+
+    private final PublicacaoRepository publicacaoRepository;
+    private final EmpresaService empresaService;
+
     @Autowired
-    private PublicacaoRepository publicacaoRepository;
+    @Lazy
+    public PublicacaoServiceImpl(PublicacaoRepository publicacaoRepository, EmpresaService empresaService) {
+        this.publicacaoRepository = publicacaoRepository;
+        this.empresaService = empresaService;
+    }
 
     public Publicacao createPost(PublicacaoDto post) {
+        //Empresa empresaBanco = empresaService.buscarPorId(post.getFkEmpresa()).orElseThrow(() -> new RuntimeException(String.format("Empresa com o ID %d não encontrado ", post.getFkEmpresa())));
         if (Objects.nonNull(post)) {
-            Publicacao publicacao = publicacaoRepository.save(PublicacaoMapper.of(post));
+            var publicacaoMapper = PublicacaoMapper.of(post);
+            publicacaoMapper.setEmpresa(empresaService.buscarPorId(post.getFkEmpresa()));
+            Publicacao publicacao = publicacaoRepository.save(publicacaoMapper);
             ouvintes.forEach(ouvinte -> {
                 try {
                     ouvinte.createPost(publicacao, post);

@@ -1,5 +1,6 @@
 package api.domain.usuario;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,6 +27,7 @@ public class Usuario {
     private String senha;
     @Column(name = "telefone")
     private String telefone;
-//    @Column(name = "isPlanoAtivo")
-//    private Boolean isPlanoAtivo;
+    @JsonIgnore
+    @Column(name = "ativo")
+    private Boolean isPlanoAtivo = false;
 }

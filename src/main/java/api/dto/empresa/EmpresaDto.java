@@ -45,7 +45,7 @@ public class EmpresaDto implements Comparable<EmpresaDto>{
     private EnderecoDto endereco;
     @NotNull
     @Schema(name = "plano", description = "Plano contratado", example = "BASIC")
-    private Plano fkPlano;
+    private Long fkPlano;
     @JsonIgnore
     private Boolean isPlanoAtivo = false;
     @Override
